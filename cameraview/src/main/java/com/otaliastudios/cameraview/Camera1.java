@@ -937,5 +937,24 @@ class Camera1 extends CameraController implements Camera.PreviewCallback, Camera
             }
         });
     }
+
+
+    // -----------------
+    // Overlay stuff.
+
+
+    @Override
+    void drawOnVideo(final OverlayCanvasDrawer canvasDrawer) {
+        if (!(mPreview instanceof GlOverlayCameraPreview)) {
+            throw new IllegalStateException("Overlay drawing is only supported with GlOverlayCameraPreview.");
+        }
+        schedule(mOverlayTask, true, new Runnable() {
+            @Override
+            public void run() {
+                GlOverlayCameraPreview cameraPreview = (GlOverlayCameraPreview) mPreview;
+                cameraPreview.drawOverlay(canvasDrawer);
+            }
+        });
+    }
 }
 

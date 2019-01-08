@@ -2,6 +2,9 @@ package com.otaliastudios.cameraview.demo;
 
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
@@ -16,8 +19,10 @@ import com.otaliastudios.cameraview.CameraListener;
 import com.otaliastudios.cameraview.CameraLogger;
 import com.otaliastudios.cameraview.CameraOptions;
 import com.otaliastudios.cameraview.CameraView;
+import com.otaliastudios.cameraview.OverlayCanvasDrawer;
 import com.otaliastudios.cameraview.PictureResult;
 import com.otaliastudios.cameraview.Mode;
+import com.otaliastudios.cameraview.Preview;
 import com.otaliastudios.cameraview.VideoResult;
 
 import java.io.File;
@@ -38,6 +43,7 @@ public class CameraActivity extends AppCompatActivity implements View.OnClickLis
         CameraLogger.setLogLevel(CameraLogger.LEVEL_VERBOSE);
 
         camera = findViewById(R.id.camera);
+        camera.setPreview(Preview.GL_SURFACE_OVERLAY);
         camera.setLifecycleOwner(this);
         camera.addCameraListener(new CameraListener() {
             public void onCameraOpened(@NonNull CameraOptions options) { onOpened(options); }
@@ -138,6 +144,16 @@ public class CameraActivity extends AppCompatActivity implements View.OnClickLis
     private void edit() {
         BottomSheetBehavior b = BottomSheetBehavior.from(controlPanel);
         b.setState(BottomSheetBehavior.STATE_COLLAPSED);
+
+        camera.drawOnVideo(new OverlayCanvasDrawer() {
+            @Override
+            public void draw(Canvas canvas) {
+                Paint paint = new Paint();
+                paint.setStyle(Paint.Style.FILL);
+                paint.setColor(Color.RED);
+                canvas.drawCircle(400, 400, 40, paint);
+            }
+        });
     }
 
     private void capturePicture() {

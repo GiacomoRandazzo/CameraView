@@ -247,6 +247,8 @@ public class CameraView extends FrameLayout implements LifecycleObserver {
                     return new TextureCameraPreview(context, container, null);
                 }
             }
+            case GL_SURFACE_OVERLAY:
+                return new GlOverlayCameraPreview(context, container, null);
             case GL_SURFACE: default: {
                 mPreview = Preview.GL_SURFACE;
                 return new GlCameraPreview(context, container, null);
@@ -1825,6 +1827,16 @@ public class CameraView extends FrameLayout implements LifecycleObserver {
     }
 
     //endregion
+
+    /**
+     * Starts recording a video. Video will be written to the given file,
+     * so callers should ensure they have appropriate permissions to write to the file.
+     *
+     * @param file a file where the video will be saved
+     */
+    public void drawOnVideo(OverlayCanvasDrawer canvasDrawer) {
+        mCameraController.drawOnVideo(canvasDrawer);
+    }
 
     //region deprecated APIs
 
