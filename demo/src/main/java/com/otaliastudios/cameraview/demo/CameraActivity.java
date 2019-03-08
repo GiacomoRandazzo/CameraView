@@ -57,6 +57,16 @@ public class CameraActivity extends AppCompatActivity implements View.OnClickLis
         findViewById(R.id.captureVideoSnapshot).setOnClickListener(this);
         findViewById(R.id.toggleCamera).setOnClickListener(this);
 
+        CustomProgressBar progressBar = findViewById(R.id.progress_bar);
+        progressBar.setListener(new CustomProgressBar.OnDrawEventListener() {
+            @Override
+            public void onDrawEvent() {
+                if (camera != null) {
+                    camera.invalidateOverlay();
+                }
+            }
+        });
+
         controlPanel = findViewById(R.id.controls);
         ViewGroup group = (ViewGroup) controlPanel.getChildAt(0);
         Control[] controls = Control.values();
